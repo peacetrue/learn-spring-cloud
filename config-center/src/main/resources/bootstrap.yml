@@ -1,0 +1,12 @@
+spring:
+    application:
+        name: config-center
+    cloud:
+        config:
+            label: master
+            server:
+                git:
+                    uri: https://github.com/peacetrue/learn-spring-cloud
+                    searchPaths: config-repo,config-repo/{application}
+                    username: ''
+                    password: ''
