@@ -1,0 +1,5 @@
+registryCenter:
+  url: http://localhost:8700/eureka
+  cluster:
+    url: http://localhost:8701/eureka,http://localhost:8702/eureka
+
