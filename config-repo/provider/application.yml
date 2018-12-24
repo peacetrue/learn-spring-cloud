@@ -1,0 +1,9 @@
+server:
+  port: 8720
+
+spring:
+  profiles:
+    include: hystrix-dashboard
+
+
+

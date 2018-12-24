@@ -1,0 +1,6 @@
+server:
+  port: 8772
+
+spring:
+  application:
+    name: service-lucy
