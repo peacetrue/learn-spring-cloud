@@ -1,0 +1,11 @@
+server:
+  port: 8701
+
+spring:
+  profiles: cluster-1
+eureka:
+  instance:
+    hostname: registrycenter1
+  client:
+    serviceUrl:
+      defaultZone: http://registrycenter2:8702/eureka
