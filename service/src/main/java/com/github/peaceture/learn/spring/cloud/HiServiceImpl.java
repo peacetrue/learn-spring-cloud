@@ -1,10 +1,12 @@
 package com.github.peaceture.learn.spring.cloud;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * @author xiayx
  */
+@Service
 public class HiServiceImpl implements HiService {
 
     @Value("${server.port}")
