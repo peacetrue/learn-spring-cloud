@@ -1,0 +1,5 @@
+description '具体业务服务'
+
+dependencies {
+    compile 'org.springframework:spring-webmvc'
+}
