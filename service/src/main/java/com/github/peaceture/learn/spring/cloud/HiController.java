@@ -17,7 +17,7 @@ public class HiController {
 
     @ResponseBody
     @RequestMapping("/hi")
-    public String hi(@RequestParam(value = "name", defaultValue = "an ning") String name) {
+    public String hi(@RequestParam(defaultValue = "an ning") String name) {
         return hiService.hi(name);
     }
 }

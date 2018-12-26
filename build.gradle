@@ -1,0 +1,63 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.3.RELEASE'
+    }
+    repositories {
+        maven { url 'http://localhost:8020/repository/maven-public/' }
+        maven { url 'http://repo.spring.io/plugins-release' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        //TODO spring-boot-gradle-plugin? other plugin?
+    }
+}
+
+
+allprojects {
+
+    apply plugin: 'io.spring.dependency-management'
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:Finchley.RELEASE"
+            mavenBom "org.springframework.boot:spring-boot-dependencies:2.0.3.RELEASE"
+            //TODO spring-cloud-dependencies? other dependencies?
+        }
+
+        dependencies {
+            dependency 'com.google.code.gson:gson:2.8.2'
+//            dependency "com.google.code.findbugs:jsr305:1.3.9"
+//            dependency 'com.google.guava:guava:24.1-jre'
+        }
+    }
+
+    group 'com.github.peacetrue.learn'
+    version '1.0-SNAPSHOT'
+
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    idea {
+        module {
+            inheritOutputDirs = false
+
+            outputDir = compileJava.destinationDir
+            testOutputDir = compileTestJava.destinationDir
+
+            downloadJavadoc = false
+            downloadSources = true
+        }
+    }
+    sourceCompatibility = 1.8
+
+    repositories {
+        maven { url 'http://localhost:8020/repository/maven-public/' }
+        mavenCentral()
+    }
+
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+    }
+
+}
+

@@ -1,8 +1,2 @@
 server:
   port: 8721
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://registrycenter1:8701/eureka
-

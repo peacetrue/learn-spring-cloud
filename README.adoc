@@ -1,0 +1,208 @@
+= 学习 spring cloud
+xiayx <xiayouxue@hotmail.com>
+v1.0, 2018-12-23: SNAPSHOT
+:doctype: docbook
+:toc: left
+:numbered:
+:imagesdir: assets/images
+:source-highlighter: coderay
+:coderay-linenums-mode: inline
+
+== 参考
+* https://blog.csdn.net/forezp/article/details/70148833[史上最简单的 SpringCloud 教程]
+
+== 学习
+中文教程还是看着很舒服的，基本上都是顺着教程按部就班的进行。
+教程是基于maven的，个人学习是基于gradle的，总得有点变化，有点自己的思考在里面。
+
+== IDEA中多实例运行
+经常会需要一个模块在不同的端口或者环境下启动？在IDEA中，可以通过如下途径实现：
+
+. Edit Configurations
+. Add New Configuration
+. Spring boot
+
+.多实例运行
+image::multiple-runner.jpg[]
+
+== server.port
+spring-boot 项目在运行时，常常会出现
+``Could not resolve placeholder 'server.port' in value "${server.port}"``
+的问题，重新编译之后又没有问题了，也不知道为什么。
+
+== 注册中心
+* 模块：registry-center
+* 端口：8700~8709，共10位，可供集群使用
+* 单一地址： http://localhost:8700
+* 集群地址： http://registrycenter1:8701 , http://registrycenter2:8702
+* 集群需要配置``/etc/hosts``
+----
+127.0.0.1 registrycenter1
+127.0.0.1 registrycenter2
+----
+* 备用地址
+** http://localhost:8700
+** http://localhost:8701
+** http://localhost:8702
+
+
+整套体系可以采用单点或者集群，区别在于：
+采用单点时，各组件之间的地址配置为域名或ip，不需要注册中心；
+采用集群时，各组件之间的地址配置为应用名，需要注册中心，注册中心会将应用名转换成域名或ip。
+
+== 配置中心
+* 模块：config-center
+* 端口：8710~8719，共10位，可供集群使用
+* 单一地址： http://localhost:8710
+* 集群地址： http://localhost:8711 , http://localhost:8712
+* 备用链接：
+** http://localhost:8710/application-default.yml
+** http://localhost:8710/provider-default.yml
+** http://localhost:8710/provider/default
+** http://localhost:8710/actuator/env
+
+.问题
+* 配置中心是否可以使用配置仓库中的属性？不能
+* 注册中心是否可以使用配置仓库中的属性？不能
+
+=== 业务服务
+* 模块：service
+* 接口：String HiService.hi(String)
+
+=== 服务提供者
+* 模块：provider
+* 端口：8720~8729，共10位，可供集群使用
+* 单一地址： http://localhost:8720
+* 集群地址： http://localhost:8721 , http://localhost:8722
+* 备用链接：
+** http://localhost:8720/hi
+
+.作为提供者客户端添加到注册中心
+----
+compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+----
+* ``@EnableEurekaClient``
+
+.作为配置客户端读取配置中心信息
+----
+compile 'org.springframework.cloud:spring-cloud-config-client'
+----
+
+//TODO 什么情况下触发断路器
+.断路器
+----
+compile 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
+----
+``@EnableHystrix``
+
+//TODO 统计熔断情况
+.断路器仪表盘
+----
+compile 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard'
+----
+* ``@EnableHystrixDashboard``
+* http://localhost:8720/hystrix
+* http://localhost:8720/actuator/hystrix.stream
+
+=== 服务消费者-ribbon
+* 模块：consumer-ribbon
+* 端口：8730~8739，共10位，可供集群使用
+* 单一地址： http://localhost:8730
+* 集群地址： http://localhost:8731 , http://localhost:8732
+* 备用链接：
+** http://localhost:8730/hi
+** http://localhost:8730/hystrix
+** http://localhost:8730/actuator/hystrix.stream
+** http://localhost:8731/hi
+** http://localhost:8732/hi
+
+=== 服务消费者-feign
+* 模块：consumer-feign
+* 端口：8740~8749，共10位，可供集群使用
+* 单一地址： http://localhost:8740
+* 集群地址： http://localhost:8741 , http://localhost:8742
+* 备用链接：
+** http://localhost:8740/hi
+** http://localhost:8740/hystrix
+** http://localhost:8740/actuator/hystrix.stream
+** http://localhost:8741/hi
+** http://localhost:8742/hi
+
+=== 断路器聚合监控
+* 模块：service-turbine
+* 端口：8730~8739，共10位，可供集群使用
+* 单一地址： http://localhost:8730
+* 集群地址： http://localhost:8731 , http://localhost:8732
+* 备用链接：
+** http://localhost:8730/hi
+
+----
+compile 'org.springframework.cloud:spring-cloud-starter-netflix-turbine'
+----
+* @EnableTurbine
+* http://localhost:8730/hystrix
+* http://localhost:8730/actuator/turbine.stream
+
+
+* eureka-client：服务提供者
+** 基本功能
+** 链路追踪
+* service-ribbon：服务消费者，基于``ribbon+RestTemplate``
+* service-feign：服务消费者，基于``ribbon+feign``
+* config-server：配置服务端，提供所有配置信息
+* config-client：配置客户端，从配置服务端读取配置信息
+* service-zuul：路由转发负载均衡
+* zipkin-server：链路追踪，记录请求路径，默认端口9411
+
+== 第十二篇: 断路器监控(Hystrix Dashboard)(Finchley版本)
+* 模块：eureka-client
+* 到底是地址``http://localhost:8762/actuator/hystrix.stream``还是``http://localhost:8762/hystrix.stream``呢？是前者
+* 地址``http://localhost:8762/actuator/hystrix.stream``无法访问，因为没有配置``management.endpoints.web.exposure.include="*"``
+
+== 第十三篇: 断路器聚合监控(Hystrix Turbine)(Finchley版本)
+//TODO 应该把端口和应用，好好的整理一下，不然太乱了
+* 模块：service-turbine
+
+== Spring Cloud Gateway
+.参考:
+* https://blog.csdn.net/forezp/article/details/83792388[Spring Cloud Gateway初体验]
+* https://blog.csdn.net/forezp/article/details/84926662[Spring Cloud Gateway 之Predict篇]
+* https://blog.csdn.net/forezp/article/details/85057268[spring cloud gateway之filter篇]
+* https://blog.csdn.net/forezp/article/details/85081162[spring cloud gateway 之限流篇]
+
+工程使用的Spring Boot版本为2.0.5.RELEASE，Spring Cloud版本为Finchley.SR1；
+而我依然使用：Spring Boot-2.0.3.RELEASE，Spring Cloud-Finchley.RELEASE；
+也许会存在不可预知的问题。
+
+* 模块：gateway
+* 使用Hystrix：添加依赖``org.springframework.cloud:spring-cloud-starter-netflix-hystrix``
+* Predicate和Filter的编程式写法与配置写法
+* 网关可以为所有服务做权限控制，但每个单独的服务仍然需要权限控制
+
+.限流算法分析：
+* 计数器算法：每秒100个请求，简单粗暴；不能有效的利用服务器性能，应该在服务器处理完请求之后，就可以接纳新的请求
+* 漏桶算法：设置一个并发上限，抛弃达到上限的请求
+* 令牌桶算法：同漏桶算法，可以通过调整令牌生成的速率，动态限制流量的大小
+
+
+.执行流程
+* DispatcherHandler
+* WebFluxEndpointHandlerMapping
+* RoutePredicateHandlerMapping
+* FilteringWebHandler
+
+.路由关系
+//路由包括断言和筛选，多个路由从上到下依次执行，
+//判断路由的断言是否通过，通过则执行其筛选，不通过则跳转到下一个路由。
+//筛选执行过程中，如果进行转向操作，会导致剩下的路由都不会被执行。
+多路由之间的执行顺序？匹配一个则中断还是依次执行所有。
+
+== 问题
+.期间也遇到一些问题，记录下来：
+* 有一些词汇描述得不准确，比如说：appication.yml -> application.yml
+* ``java.lang.NoSuchMethodError: com.google.gson.GsonBuilder.setLenient()``：升级版本 https://github.com/SeleniumHQ/selenium/issues/5613
+* EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE.
+* 断路由后，服务提供者恢复正常之后，消费者仍然返回错误结果，需要一段时间的等待
+* config client 缺少``org.springframework.cloud:spring-cloud-config-client``
+* 服务链路追踪：使用注册中心请求超时
+

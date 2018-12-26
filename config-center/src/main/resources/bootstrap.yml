@@ -1,3 +1,8 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8700/eureka
+      
 spring:
     application:
         name: config-center
