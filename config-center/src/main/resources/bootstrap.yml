@@ -11,7 +11,12 @@ spring:
             label: master
             server:
                 git:
-                    uri: https://github.com/peacetrue/learn-spring-cloud
-                    searchPaths: config-repo,config-repo/{application}
-                    username: ''
-                    password: ''
+                  uri: https://github.com/peacetrue/learn-spring-cloud
+                  searchPaths: config-repo,config-repo/{application}
+                  username: ''
+                  password: ''
+                  repos:
+                    local:
+                      pattern: "*"
+                      uri: file:/Users/xiayx/Documents/Projects/learn-spring-cloud
+                      searchPaths: config-repo,config-repo/{application}

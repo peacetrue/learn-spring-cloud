@@ -11,3 +11,20 @@ management:
           cors:
             allowed-origins: "*"
             allowed-methods: "*"
+
+spring:
+  cloud:
+    bus:
+      enabled: true
+      trace:
+        enabled: true
+  rabbitmq:
+    host: localhost
+    password: guest
+    port: 5672
+    username: guest
+
+test:
+  cloud:
+    bus:
+      enable: false

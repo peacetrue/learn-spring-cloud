@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableHystrixDashboard
 @EnableCircuitBreaker
 @EnableTurbine
-@RestController
 public class ServiceTurbineApplication {
 
     public static void main(String[] args) {

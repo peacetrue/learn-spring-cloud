@@ -3,7 +3,7 @@ server:
 
 eureka:
   instance:
-    hostname: localhost
+    hostname: localhost13
   client:
     registerWithEureka: false
     fetchRegistry: false
@@ -13,3 +13,13 @@ eureka:
 spring:
   application:
     name: registry-center
+
+management:
+    endpoints:
+        web:
+          exposure:
+            include: "*"
+          cors:
+            allowed-origins: "*"
+            allowed-methods: "*"
+

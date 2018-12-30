@@ -6,5 +6,6 @@ dependencies {
     compile 'org.springframework.cloud:spring-cloud-starter-openfeign'
     compile 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
     compile 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard'
+    compile 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
     compile project(':service')
 }
