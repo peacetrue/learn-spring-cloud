@@ -7,6 +7,6 @@ dependencies {
     compile 'org.springframework.cloud:spring-cloud-config-client'
     compile 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
     compile project(':service')
-//    compile 'org.springframework.cloud:spring-cloud-starter-zipkin'
-//    compile 'io.zipkin.brave:brave-spring-beans:5.5.2'
+    compile 'org.springframework.cloud:spring-cloud-starter-zipkin'
+
 }

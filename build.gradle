@@ -39,18 +39,18 @@ allprojects {
     sourceSets.main.output.resourcesDir = sourceSets.main.output.classesDirs[0]
     sourceCompatibility = 1.8
     
-//    apply plugin: 'idea'
-//    idea {
-//        module {
-//            inheritOutputDirs = false
-//
-//            outputDir = compileJava.destinationDir
-//            testOutputDir = compileTestJava.destinationDir
-//
-//            downloadJavadoc = false
-//            downloadSources = true
-//        }
-//    }
+    apply plugin: 'idea'
+    idea {
+        module {
+            inheritOutputDirs = false
+
+            outputDir = compileJava.destinationDir
+            testOutputDir = compileTestJava.destinationDir
+
+            downloadJavadoc = false
+            downloadSources = true
+        }
+    }
 
     repositories {
         maven { url 'http://localhost:8020/repository/maven-public/' }

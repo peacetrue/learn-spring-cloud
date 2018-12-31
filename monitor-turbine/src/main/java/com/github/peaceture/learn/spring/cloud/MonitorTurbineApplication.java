@@ -8,7 +8,6 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.cloud.netflix.turbine.EnableTurbine;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author xiayx
@@ -20,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableHystrixDashboard
 @EnableCircuitBreaker
 @EnableTurbine
-public class ServiceTurbineApplication {
+public class MonitorTurbineApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ServiceTurbineApplication.class, args);
+        SpringApplication.run(MonitorTurbineApplication.class, args);
     }
 
 }

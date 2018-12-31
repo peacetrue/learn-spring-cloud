@@ -23,8 +23,15 @@ spring:
     password: guest
     port: 5672
     username: guest
+  sleuth:
+    sampler:
+      probability: 1.0
+    traceId128: true
+  zipkin:
+    sender:
+      type: web
 
 test:
   cloud:
     bus:
-      enable: false
+      enable: true

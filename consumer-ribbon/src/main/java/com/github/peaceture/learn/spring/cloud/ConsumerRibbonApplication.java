@@ -1,5 +1,6 @@
 package com.github.peaceture.learn.spring.cloud;
 
+import brave.sampler.Sampler;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -32,7 +33,7 @@ public class ConsumerRibbonApplication {
 
     @Bean
     @LoadBalanced
-    RestTemplate restTemplate() {
+    public RestTemplate restTemplate() {
         return new RestTemplate();
     }
 
@@ -56,9 +57,4 @@ public class ConsumerRibbonApplication {
 
     }
 
-
-//    @Bean
-//    public Sampler defaultSampler() {
-//        return Sampler.ALWAYS_SAMPLE;
-//    }
 }

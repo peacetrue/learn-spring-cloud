@@ -12,3 +12,7 @@ spring:
             discovery:
                 enabled: true
                 serviceId: config-center
+
+#logging:
+#  level:
+#    "org.springframework": trace
