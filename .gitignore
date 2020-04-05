@@ -22,3 +22,5 @@
 */target/
 */*/target/
 .ideaDataSources
+*/build
+*/buildOutputCleanup

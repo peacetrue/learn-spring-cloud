@@ -1,15 +1,15 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.3.RELEASE'
+        springBootVersion = "2.2.5.RELEASE"
     }
     repositories {
-        maven { url 'http://localhost:8020/repository/maven-public/' }
+        mavenLocal()
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
         maven { url 'http://repo.spring.io/plugins-release' }
         mavenCentral()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        //TODO spring-boot-gradle-plugin? other plugin?
     }
 }
 
@@ -20,8 +20,8 @@ allprojects {
 
     dependencyManagement {
         imports {
-            mavenBom "org.springframework.cloud:spring-cloud-dependencies:Finchley.RELEASE"
-            mavenBom "org.springframework.boot:spring-boot-dependencies:2.0.3.RELEASE"
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:Hoxton.SR3"
+            mavenBom "org.springframework.boot:spring-boot-dependencies:2.2+"
             //TODO spring-cloud-dependencies? other dependencies?
         }
 
@@ -38,22 +38,9 @@ allprojects {
     apply plugin: 'java'
     sourceSets.main.output.resourcesDir = sourceSets.main.output.classesDirs[0]
     sourceCompatibility = 1.8
-    
-    apply plugin: 'idea'
-    idea {
-        module {
-            inheritOutputDirs = false
-
-            outputDir = compileJava.destinationDir
-            testOutputDir = compileTestJava.destinationDir
-
-            downloadJavadoc = false
-            downloadSources = true
-        }
-    }
 
     repositories {
-        maven { url 'http://localhost:8020/repository/maven-public/' }
+        mavenLocal()
         mavenCentral()
     }
 
